@@ -90,7 +90,7 @@ function addInventory() {
                 }
             }
             newStock = selection.stock_quantity + parseInt(res.amount)
-            console.log(newStock +"debugging")
+            console.log(newStock + "debugging")
             connection.query("UPDATE products SET ? WHERE ?",
                 [
                     {
@@ -111,7 +111,34 @@ function addInventory() {
 }
 
 function addProduct() {
-
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "What is the name of the item you wish to add to the catalog?",
+            name: "product_name"
+        },
+        {
+            type: "input",
+            message: "What department will this item be listed under?",
+            name: "department_name"
+        },
+        {
+            type: "input",
+            message: "What price will this item be listed at?",
+            name: "price"
+        },
+        {
+            type: "input",
+            message: "How many units of this item are you adding to the initial stock?",
+            name: "stock_quantity"
+        }
+    ]).then(function (res) {
+        connection.query("INSERT INTO products SET ?", res, function (err, results) {
+            if (err) throw err;
+            console.log(divider + "You have added " + res.stock_quantity + " units of " + res.product_name + " to the catalog." + divider)
+            returnTo()
+        });
+    });
 }
 
 function returnTo() {
